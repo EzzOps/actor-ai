@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server"
 import { structuredAI } from "@/lib/openai"
 import { PROMPTS } from "@/prompts"
+
+export const dynamic = "force-static"
+
 export async function POST(req: Request) {
   try {
     const { bookTitle, author, reason, chapters } = await req.json()

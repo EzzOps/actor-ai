@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server"
 import { getSupabase } from "@/lib/supabase"
+
+export const dynamic = "force-static"
+
 export async function GET(req: Request) {
   try {
     const q = new URL(req.url).searchParams.get("q")
