@@ -1,36 +1,147 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ACTOR AI — Interactive Learning Platform
 
-## Getting Started
+Transform reading from passive consumption into an active, AI-guided learning journey.
 
-First, run the development server:
+## The ACTOR Framework
+
+```
+Aim → Read → Compress → Test → Own → Run → Review → Repeat
+```
+
+The AI acts as Coach, Teacher, Devil's Advocate, Mentor, Quiz Master, and Memory Trainer — never just a summary generator.
+
+## Features (MVP)
+
+- **Mission Generator** — Set reading intentions with AI-generated objectives
+- **Reflection Engine** — Socratic questioning to deepen understanding
+- **Compression Engine** — Identify trunk (core), branches (supporting), leaves (details)
+- **Debate Engine** — AI challenges your interpretations as a debate opponent
+- **Adaptive Quiz** — Multiple question types with dynamic difficulty
+- **Teaching Engine** — Explain concepts and get scored on completeness, correctness, clarity
+- **Application Engine** — Turn ideas into real-world experiments
+- **Spaced Repetition** — Review sessions at optimal intervals (1, 3, 7, 14, 30, 90 days)
+- **Knowledge Graph** — Vector-powered concept linking with semantic search
+- **Gamification** — XP, levels (Novice → Master), and achievements
+- **Analytics Dashboard** — Track retention, critical thinking, and learning velocity
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Next.js 15, React, TypeScript, TailwindCSS |
+| UI | shadcn/ui, Framer Motion, Lucide Icons |
+| Database | PostgreSQL + pgvector (via Supabase) |
+| Auth | Supabase Auth (Google, GitHub, Email) |
+| Storage | Supabase Storage (PDF, EPUB, images) |
+| AI | OpenAI API (configurable model via env vars) |
+| Deployment | Vercel (frontend), Supabase (database) |
+
+## Quick Start
+
+### 1. Clone and install
+
+```bash
+git clone <your-repo-url> actor-ai
+cd actor-ai
+npm install
+```
+
+### 2. Set up Supabase
+
+1. Create a project at [supabase.com](https://supabase.com)
+2. Run `database/schema.sql` in the SQL Editor
+3. Enable Auth providers (Google, GitHub, Email) in Authentication → Settings
+4. Copy your project URL, anon key, and service role key
+
+### 3. Environment variables
+
+```bash
+cp .env.example .env.local
+```
+
+Edit `.env.local`:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+OPENAI_API_KEY=sk-your_openai_key
+```
+
+### 4. Run
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 5. Verify
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+bash scripts/verify.sh
+```
 
-## Learn More
+## Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Yes | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Yes | Supabase anonymous key |
+| `SUPABASE_SERVICE_ROLE_KEY` | Yes | Supabase service role key |
+| `OPENAI_API_KEY` | Yes* | OpenAI API key |
+| `OPENAI_BASE_URL` | No | Custom API endpoint (default: OpenAI) |
+| `MODEL` | No | Model name (default: gpt-4o) |
+| `EMBEDDING_MODEL` | No | Embedding model (default: text-embedding-3-large) |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+*Required for AI-powered features. App works without it (shows static fallbacks).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Architecture
 
-## Deploy on Vercel
+```
+app/                  # Next.js App Router pages
+  api/                # Route handlers (AI workflows)
+components/           # React components
+  ui/                 # shadcn/ui primitives
+  layout/             # Sidebar, AppShell
+lib/                  # Clients (Supabase, OpenAI), utilities
+types/                # TypeScript interfaces
+prompts/              # AI prompt templates
+database/             # SQL schema
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## API Routes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Route | Method | Description |
+|-------|--------|-------------|
+| `/api/mission` | POST | Generate reading objectives |
+| `/api/reflection` | POST | Generate reflective questions |
+| `/api/quiz` | POST | Generate adaptive quiz |
+| `/api/search` | GET | Semantic search across knowledge |
+| `/api/dashboard` | GET | Dashboard data |
+| `/api/profile` | GET | User profile and progress |
+
+## Database Tables
+
+20+ tables covering users, books, chapters, reading sessions, missions, reflections, compression, challenges, quizzes, teaching, applications, experiments, reviews, knowledge graph, achievements, bookmarks, highlights, and notes.
+
+All tables have Row Level Security (RLS) enabled.
+
+## Deployment
+
+### Vercel
+
+```bash
+npm run build    # Verify build succeeds
+vercel deploy    # Deploy to Vercel
+```
+
+Set environment variables in Vercel project settings.
+
+### Supabase
+
+Schema is in `database/schema.sql`. Run in Supabase SQL Editor before deploying.
+
+## License
+
+MIT
