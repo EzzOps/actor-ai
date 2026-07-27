@@ -1,7 +1,5 @@
 "use client"
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { supabase } from "@/lib/supabase"
+import { useState } from "react"
 import { AppShell } from "@/components/layout/app-shell"
 import { Card, CardContent, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -18,19 +16,7 @@ const ALL = [
   {slug:"ten-books",title:"Bookworm",description:"Finished 10 books",icon:"📚"},
 ]
 export default function AchievementsPage() {
-  const r = useRouter()
-  const [unlocked, setUnlocked] = useState<string[]>([])
-  const [loading, setLoading] = useState(true)
-  useEffect(()=>{(supabase.auth as any).getSession().then((res: any)=>{const session=res.data?.session;if(!session){r.push("/");return}load()})},[r])
-  async function load() {
-    try {
-      const {data:{user}} = await (supabase.auth as any).getUser()
-      if(!user) return
-      const {data} = await (supabase as any).from("achievements").select("slug").eq("user_id",user.id)
-      setUnlocked(data?.map((a:any)=>a.slug)||[])
-    } catch(e){console.error(e)}
-    finally{setLoading(false)}
-  }
+  const [unlocked] = useState<string[]>([])
   return (
     <AppShell>
       <div className="space-y-6">
